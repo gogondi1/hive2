@@ -15,7 +15,7 @@ resource "aws_security_group" "hive_asg_sg" {
     to_port = 80
     protocol = "tcp"
     cidr_blocks = [
-      "0.0.0.0/16"
+      "0.0.0.0/0"
     ]
   }
   ingress {
@@ -23,7 +23,7 @@ resource "aws_security_group" "hive_asg_sg" {
     to_port = 3000
     protocol = "tcp"
     cidr_blocks = [
-      "0.0.0.0/16"
+      "0.0.0.0/0"
     ]
   }
   ingress {
