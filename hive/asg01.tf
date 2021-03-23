@@ -15,7 +15,7 @@ resource "aws_security_group" "hive_asg_sg" {
     to_port = 80
     protocol = "tcp"
     cidr_blocks = [
-      "0.0.0.0/0"
+      "0.0.0.0/16"
     ]
   }
   ingress {
@@ -23,7 +23,7 @@ resource "aws_security_group" "hive_asg_sg" {
     to_port = 3000
     protocol = "tcp"
     cidr_blocks = [
-      "0.0.0.0/0"
+      "0.0.0.0/16"
     ]
   }
   ingress {
@@ -41,10 +41,30 @@ resource "aws_security_group" "hive_asg_sg" {
 }
 
 # Create Launch Configuration
+data "aws_ami" "ubuntu" {
+
+  owners = ["099720109477"]
+
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20210223"]
+  }
+
+  filter {
+        name = "virtualization-type"
+        values = ["hvm"]
+    }
+
+}
+
+
+
+
 
 resource "aws_launch_configuration" "hive_launch_config" {
   name_prefix   = "Hive Launch Configuration"
-  image_id      = "ami-08962a4068733a2b6"
+  image_id      = data.aws_ami.ubuntu.image_id
   instance_type = "t2.micro"
   security_groups = [aws_security_group.hive_asg_sg.id]
   key_name = aws_key_pair.ssh-key.key_name
